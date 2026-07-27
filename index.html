@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Redstone - Built to be Noticed</title>
+    <link rel="stylesheet" href="./style.css">
+    
+    <!-- GSAP for 3D Carousel -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/Draggable.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@0,600;1,600&family=Poppins:wght@400;500;600;700&family=Antic+Didone&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Hero & Header Background Container -->
+    <div class="hero-bg-wrapper">
+        <!-- Header -->
+        <header class="header reveal-up">
+            <div class="container header-container">
+                <div class="logo">
+                    <img src="./logo.png" alt="Neo Redstone Media Pvt Ltd Logo">
+                </div>
+                <nav class="nav">
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#services">Services</a></li>
+                        <li><a href="#portfolio">360 Solving</a></li>
+                        <li><a href="#clients">Clients</a></li>
+                        <li><a href="#contact">Contact US</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <section id="home" class="hero">
+            <div class="container hero-container">
+                
+                <div class="hero-center-content">
+                    <h1 class="hero-title reveal-up delay-1">
+                        Built to <br>
+                        <span class="highlight">be Noticed</span>
+                    </h1>
+                    
+                    <div class="floating-images" id="parallax-wrap">
+                        <div class="float-item img1 reveal-up delay-2" data-value="-15">
+                            <div class="img-wrapper">
+                                <img src="./Assets/img1.png" alt="Creative & Digital Strategy">
+                            </div>
+                        </div>
+                        <div class="float-item img2 reveal-up delay-3" data-value="5">
+                            <div class="img-wrapper">
+                                <img src="./Assets/img2.png" alt="Performance Marketing">
+                            </div>
+                        </div>
+                        <div class="float-item img3 reveal-up delay-4" data-value="25">
+                            <div class="img-wrapper">
+                                <img src="./Assets/img3.png" alt="Branding & Marketing Communications">
+                            </div>
+                        </div>
+                        <div class="float-item img4 reveal-up delay-5" data-value="-5">
+                            <div class="img-wrapper">
+                                <img src="./Assets/img4.png" alt="Social Media IPs">
+                            </div>
+                        </div>
+                        <div class="float-item img5 reveal-up delay-6" data-value="15">
+                            <div class="img-wrapper">
+                                <img src="./Assets/img5.png" alt="Website UI/UX">
+                            </div>
+                        </div>
+                        <div class="float-item img6 reveal-up delay-3" data-value="-10">
+                            <div class="img-wrapper">
+                                <img src="./Assets/img6.png" alt="Brand Consultancy">
+                            </div>
+                        </div>
+                        <div class="float-item img7 reveal-up delay-4" data-value="10">
+                            <div class="img-wrapper">
+                                <img src="./Assets/img7.png" alt="Brand Films">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Partners Section -->
+    <section id="clients" class="partners">
+        <div class="container partners-container">
+            <div class="partners-text reveal-up">
+                <h2>20+ Ambitious<br><span class="highlight-red">Brands</span> Trust Us</h2>
+            </div>
+            <div class="logos-strip reveal-up delay-2">
+                <img src="./hyatt.png" alt="HYATT" class="logo-hyatt">
+                <img src="./conrad.png" alt="CONRAD" class="logo-conrad">
+                <img src="./kpit.png" alt="KPIT" class="logo-kpit">
+                <img src="./tata.png" alt="TATA" class="logo-tata">
+                <img src="./purple.png" alt="PURPLE" class="logo-purple">
+            </div>
+        </div>
+    </section>
+
+    <!-- Represent Roster -->
+    <section id="roster" class="roster">
+        <div class="container text-center">
+            <h2 class="section-title reveal-up">Represent Roster</h2>
+            <div class="roster-wrapper">
+                <div class="stage">
+                    <div class="dragger"></div>
+                    <div class="ring">
+                        <!-- We use background-image for these via GSAP, or keep <img> tags. 
+                             The reference uses background images on .img divs. -->
+                        <div class="img"></div>
+                        <div class="img"></div>
+                        <div class="img"></div>
+                        <div class="img"></div>
+                        <div class="img"></div>
+                        <div class="img"></div>
+                        <div class="img"></div>
+                        <div class="img"></div>
+                        <div class="img"></div>
+                        <div class="img"></div>
+                    </div>
+                </div>
+            </div>
+            <p class="section-subtitle reveal-up delay-5">We nurture a diverse roster of influencers, building partnerships, expanding their reach, and helping<br>them grow through collaborations and impactful content.</p>
+        </div>
+    </section>
+
+    <!-- Work to be noticed -->
+    <section id="portfolio" class="work">
+        <div class="container">
+            <h2 class="section-title reveal-up">Work to be noticed</h2>
+            <div class="work-grid">
+                <div class="work-item w1 reveal-up delay-1"><img src="https://picsum.photos/400/300?random=20" alt="Work 1"></div>
+                <div class="work-item w2 reveal-up delay-2"><img src="https://picsum.photos/400/300?random=21" alt="Work 2"></div>
+                <div class="work-item w3 reveal-up delay-3"><img src="https://picsum.photos/600/400?random=22" alt="Work 3"></div>
+                <div class="work-item w4 reveal-up delay-1"><img src="https://picsum.photos/400/300?random=23" alt="Work 4"></div>
+                <div class="work-item w5 reveal-up delay-2"><img src="https://picsum.photos/400/300?random=24" alt="Work 5"></div>
+                <div class="work-item w6 reveal-up delay-4"><img src="https://picsum.photos/400/300?random=25" alt="Work 6"></div>
+                <div class="work-item w7 reveal-up delay-2"><img src="https://picsum.photos/400/300?random=26" alt="Work 7"></div>
+                <div class="work-item w8 reveal-up delay-3"><img src="https://picsum.photos/400/300?random=27" alt="Work 8"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services -->
+    <section id="services" class="services">
+        <div class="container">
+            <h2 class="section-title reveal-up">Services</h2>
+            <div class="services-grid">
+                <div class="service-box reveal-up delay-1"></div>
+                <div class="service-box reveal-up delay-2"></div>
+                <div class="service-box reveal-up delay-3"></div>
+                <div class="service-box reveal-up delay-1"></div>
+                <div class="service-box reveal-up delay-2"></div>
+                <div class="service-box reveal-up delay-3"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Approach Section -->
+    <section id="about" class="approach">
+        <div class="container">
+            <h2 class="section-title text-light approach-title reveal-up">our approach towards the success</h2>
+            <p class="section-subtitle text-light reveal-up delay-1">shape and energize your brand</p>
+            
+            <div class="approach-grid">
+                <!-- Column 1 -->
+                <div class="approach-col left">
+                    <div class="step reveal-up delay-1">
+                        <div class="step-content">
+                            <h3>Strategy</h3>
+                            <p>We delve deep into market research and competitive analysis, defining unique positioning to ensure your brand stands out in the crowded market.</p>
+                        </div>
+                        <div class="step-num">2</div>
+                    </div>
+                    <div class="step reveal-up delay-3">
+                        <div class="step-content">
+                            <h3>Campaign Execution</h3>
+                            <p>Strategic deployment across multiple channels with meticulous tracking. We ensure your brand message resonates with your audience and drives growth.</p>
+                        </div>
+                        <div class="step-num">4</div>
+                    </div>
+                    <div class="step reveal-up delay-5">
+                        <div class="step-content">
+                            <h3>Growth & Scaling</h3>
+                            <p>Consistent analysis and optimization drive sustained engagement and audience expansion.</p>
+                        </div>
+                        <div class="step-num">6</div>
+                    </div>
+                </div>
+                
+                <!-- Column 2 -->
+                <div class="approach-col right">
+                    <div class="step reveal-up delay-2">
+                        <div class="step-num">1</div>
+                        <div class="step-content">
+                            <h3>Discovery</h3>
+                            <p>Thorough brand assessment to identify core values and target audiences, establishing a solid foundation for your marketing and growth strategies.</p>
+                        </div>
+                    </div>
+                    <div class="step reveal-up delay-4">
+                        <div class="step-num">3</div>
+                        <div class="step-content">
+                            <h3>Creative Development</h3>
+                            <p>Turning strategy into engaging content and visual identity. Creating compelling stories that connect with your audience and elevate your brand.</p>
+                        </div>
+                    </div>
+                    <div class="step reveal-up delay-6">
+                        <div class="step-num">5</div>
+                        <div class="step-content">
+                            <h3>Optimization</h3>
+                            <p>Data-driven refinements to maximize ROI and scale impact. We continuously adapt to market trends to ensure your campaigns perform at their best.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="more-btn-container reveal-up delay-3">
+                <a href="#" class="btn-more">More</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- QYOU Media Section -->
+    <section class="qyou-media">
+        <div class="container text-center">
+            <h2 class="qyou-title reveal-up">A QYOU MEDIA COMPANY</h2>
+            <button class="btn-qyou reveal-up delay-2"><span class="arrow">→</span> Visit QYou Website</button>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <div class="container">
+            <h2 class="section-title reveal-up">Testimonials</h2>
+            <div class="testimonial-grid">
+                <div class="testimonial-box reveal-up delay-1"></div>
+                <div class="testimonial-box reveal-up delay-2"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-col reveal-up delay-1">
+                    <p class="footer-desc">We are a fully integrated digital marketing agency that helps brands grow.</p>
+                    <div class="socials">
+                        <a href="#">T</a> <a href="#">I</a> <a href="#">F</a> <a href="#">L</a>
+                    </div>
+                </div>
+                <div class="footer-col links reveal-up delay-2">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Our Team</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col links reveal-up delay-3">
+                    <h4>Services</h4>
+                    <ul>
+                        <li><a href="#">Strategy</a></li>
+                        <li><a href="#">Branding</a></li>
+                        <li><a href="#">Design</a></li>
+                        <li><a href="#">Marketing</a></li>
+                        <li><a href="#">Support</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col links reveal-up delay-4">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="#">Terms of Use</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Cookie Policy</a></li>
+                        <li><a href="#">Security</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col links reveal-up delay-5">
+                    <h4>Contact</h4>
+                    <ul>
+                        <li><a href="#">Email Us</a></li>
+                        <li><a href="#">Support</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom reveal-up delay-6">
+                <p>&copy; 2024 The Redstone. All rights reserved.</p>
+            </div>
+        </div>
+        <div class="footer-bg-text reveal-up">REDSTONE</div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
