@@ -35,43 +35,150 @@ document.addEventListener('DOMContentLoaded', () => {
         revealObserver.observe(el);
     });
 
-    // --- NEW: Combined Mouse Parallax and Scroll Rotation ---
+    // --- NEW: Premium Cinematic Floating Images (Single Render Loop) ---
     const parallaxWrap = document.getElementById("parallax-wrap");
     const floatItems = document.querySelectorAll('.float-item');
     
-    if (parallaxWrap && floatItems.length > 0) {
+    if (parallaxWrap && floatItems.length > 0 && typeof gsap !== 'undefined') {
         
-        let currentMouseX = window.innerWidth / 2;
-        let currentMouseY = window.innerHeight / 2;
-        
-        document.addEventListener("mousemove", (event) => {
-            currentMouseX = event.pageX;
-            currentMouseY = event.pageY;
-            updateTransforms();
-        });
-        
-        window.addEventListener('scroll', () => {
-            updateTransforms();
-        });
-        
-        function updateTransforms() {
-            const scrollY = window.scrollY;
-            
-            // The whole group revolves around the COMMON center
-            const wheelRotation = scrollY * -0.05; 
-            parallaxWrap.style.transform = `translate(-50%, -50%) rotate(${wheelRotation}deg)`;
-            
-            // Each picture revolves on its OWN center (counter-rotation) + your exact mouse parallax math
-            floatItems.forEach((shift) => {
-                const position = shift.getAttribute("data-value");
-                
-                // EXACT math from user snippet
-                const x = (window.innerWidth - currentMouseX * position) / 90;
-                const y = (window.innerHeight - currentMouseY * position) / 90;
+        // Depth and Base Angle Configurations
+        const layers = [
+            { depth: 1.0, angle: -12 },  // img1 (foreground)
+            { depth: 0.3, angle: 7 },    // img2 (background)
+            { depth: 0.6, angle: -5 },   // img3 (midground)
+            { depth: 1.0, angle: 10 },   // img4 (foreground)
+            { depth: 0.3, angle: -8 },   // img5 (background)
+            { depth: 0.6, angle: 4 },    // img6 (midground)
+            { depth: 1.0, angle: -3 }    // img7 (foreground)
+        ];
 
-                shift.style.transform = `translateX(${x}px) translateY(${y}px) rotate(${-wheelRotation}deg)`;
+        // Virtual state for every card
+        const cards = Array.from(floatItems).map((item, index) => {
+            return {
+                el: item.querySelector('.img-wrapper'),
+                img: item.querySelector('img'),
+                depth: layers[index] ? layers[index].depth : 0.5,
+                baseRotZ: layers[index] ? layers[index].angle : 0,
+                
+                // Virtual animated properties
+                entranceProgress: 0,
+                hoverProgress: 0,
+                
+                // Float variables
+                phaseX: Math.random() * Math.PI * 2,
+                phaseY: Math.random() * Math.PI * 2,
+                speed: 0.0005 + Math.random() * 0.0005
+            };
+        });
+
+        // Trigger entrance animations virtually
+        cards.forEach((card, index) => {
+            gsap.to(card, {
+                entranceProgress: 1,
+                duration: 1.5,
+                ease: "elastic.out(1, 0.75)",
+                delay: index * 0.1
+            });
+
+            // Setup virtual hover events
+            card.el.addEventListener('mouseenter', () => {
+                card.el.parentNode.style.zIndex = "10";
+                gsap.to(card, { hoverProgress: 1, duration: 0.4, ease: "power2.out" });
+                gsap.to(card.img, { boxShadow: "0 30px 70px rgba(0,0,0,0.24)", duration: 0.4 });
+            });
+
+            card.el.addEventListener('mouseleave', () => {
+                card.el.parentNode.style.zIndex = "1";
+                gsap.to(card, { hoverProgress: 0, duration: 0.4, ease: "power2.out" });
+                gsap.to(card.img, { boxShadow: "0 18px 45px rgba(0,0,0,0.16)", duration: 0.4 });
+            });
+        });
+
+        const isMobile = window.innerWidth <= 992;
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        
+        let targetMouseX = 0;
+        let targetMouseY = 0;
+        let currentMouseX = 0;
+        let currentMouseY = 0;
+
+        // Only track mouse if not on mobile, and ONLY over the hero container
+        if (!isMobile) {
+            parallaxWrap.addEventListener("mousemove", (event) => {
+                const rect = parallaxWrap.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+                
+                // Normalize from -1 to 1 based on hero center
+                targetMouseX = (event.clientX - centerX) / (rect.width / 2);
+                targetMouseY = (event.clientY - centerY) / (rect.height / 2);
+                
+                // Clamp to -1 -> 1
+                targetMouseX = Math.max(-1, Math.min(1, targetMouseX));
+                targetMouseY = Math.max(-1, Math.min(1, targetMouseY));
+            });
+
+            parallaxWrap.addEventListener("mouseleave", () => {
+                targetMouseX = 0;
+                targetMouseY = 0;
             });
         }
+
+        // Master Render Loop
+        function render(time) {
+            // Lerp the global mouse vector for heavy spring physics
+            currentMouseX += (targetMouseX - currentMouseX) * 0.08;
+            currentMouseY += (targetMouseY - currentMouseY) * 0.08;
+
+            cards.forEach(card => {
+                // 1. Calculate Ambient Float
+                let floatX = 0;
+                let floatY = 0;
+                if (!prefersReducedMotion) {
+                    floatX = Math.sin(time * card.speed + card.phaseX) * 4 * card.depth;
+                    floatY = Math.sin(time * card.speed + card.phaseY) * 4 * card.depth;
+                }
+
+                // 2. Calculate Mouse Parallax & Tilt
+                const parallaxX = currentMouseX * 10 * card.depth;
+                const parallaxY = currentMouseY * 10 * card.depth;
+                
+                // Tilt rotation (Max 4deg)
+                const tiltX = currentMouseY * -4 * card.depth;
+                const tiltY = currentMouseX * 4 * card.depth;
+
+                // 3. Calculate Hover Offset
+                const scale = 1 + (0.05 * card.hoverProgress);
+                const z = 40 * card.hoverProgress;
+                // Add a slight hover lift
+                const hoverY = -10 * card.hoverProgress;
+
+                // 4. Entrance Calculation (Slide & Fade)
+                const entranceY = 80 * (1 - card.entranceProgress);
+                const entranceScale = 0.8 + (0.2 * card.entranceProgress);
+                
+                // Base rotation interpolates from -15deg offset to original baseRotZ
+                const currentRotZ = card.baseRotZ - (15 * (1 - card.entranceProgress));
+
+                // 5. Apply Final Transform securely via GSAP set
+                // Final Transform = Base + Float + Parallax + Hover + Entrance
+                gsap.set(card.el, {
+                    x: floatX + parallaxX,
+                    y: floatY + parallaxY + entranceY + hoverY,
+                    z: z,
+                    rotationX: tiltX,
+                    rotationY: tiltY,
+                    rotationZ: currentRotZ, // Permanent Base Rotation
+                    scale: scale * entranceScale,
+                    opacity: card.entranceProgress
+                });
+            });
+
+            requestAnimationFrame(render);
+        }
+
+        // Start render loop
+        requestAnimationFrame(render);
     }
 
     // --- NEW: GSAP 3D Draggable Carousel for Represent Roster ---

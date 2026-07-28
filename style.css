@@ -205,15 +205,19 @@ a:hover {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 1800px; /* Increased from 1200px to spread images much further sideways */
-    height: 700px; /* Slightly increased height to balance the ring */
-    pointer-events: auto; /* Re-enable pointer events so hover works */
-    z-index: 1; /* Behind text */
+    width: 1300px; /* Tightened orbit */
+    height: 600px; /* Tightened orbit */
+    pointer-events: auto;
+    z-index: 1;
+    perspective: 1400px;
+    transform-style: preserve-3d;
 }
 
 .float-item {
     position: absolute;
-    transition: transform 0.1s ease-out; /* Smooth out mouse parallax slightly */
+    /* Removed transition so GSAP can animate without stutter */
+    transform-style: preserve-3d;
+    z-index: 1; /* Base z-index */
 }
 
 /* The wrapper holds the CSS 3D rotation so JS parallax doesn't override it */
@@ -223,13 +227,20 @@ a:hover {
 }
 
 .img-wrapper img {
-    border-radius: 8px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+    border-radius: 20px;
+    box-shadow: 0 18px 45px rgba(0,0,0,0.16);
     width: 100%;
     height: auto;
     display: block;
-    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-    pointer-events: auto; /* Allow hovering on images despite parent */
+    pointer-events: auto;
+    /* Transitions removed: GSAP handles hover perfectly */
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .float-item {
+        animation: none !important;
+        transition: none !important;
+    }
 }
 
 .float-item p {
@@ -246,25 +257,12 @@ a:hover {
    Pushed outwards to form a true ring around the text.
 */
 .img1 { top: 0%; left: 0%; width: 220px; }
-.img1 .img-wrapper { transform: rotate(-12deg) rotateY(15deg); }
-
 .img2 { top: -15%; left: 50%; width: 150px; }
-.img2 .img-wrapper { transform: rotate(5deg) scale(0.9); }
-
 .img3 { top: 10%; right: 0%; width: 230px; }
-.img3 .img-wrapper { transform: rotate(15deg) rotateY(-15deg); }
-
 .img4 { top: 65%; left: 5%; width: 180px; }
-.img4 .img-wrapper { transform: rotate(-8deg) rotateY(10deg); }
-
 .img5 { bottom: -10%; left: 35%; width: 160px; top: auto; }
-.img5 .img-wrapper { transform: rotate(-2deg); }
-
 .img6 { bottom: -15%; right: 30%; width: 190px; top: auto; }
-.img6 .img-wrapper { transform: rotate(10deg) rotateY(-10deg); }
-
 .img7 { top: 60%; right: 2%; width: 170px; }
-.img7 .img-wrapper { transform: rotate(-10deg) rotateY(-20deg); }
 
 /* Partners Section */
 .partners {
