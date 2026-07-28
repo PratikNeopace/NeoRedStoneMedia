@@ -418,28 +418,73 @@ a:hover {
 }
 
 .services-grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 40px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
     max-width: 1250px;
     margin: 0 auto;
 }
 
 .service-box {
-    background-color: #e5e5e5;
-    width: 374px; 
-    height: 406px; 
-    border-radius: 10px;
+    background: #ffffff;
+    border: 1px solid #f0f0f0;
+    border-radius: 16px;
+    padding: 40px 30px;
     cursor: pointer;
-    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.4s ease;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+    display: flex;
+    flex-direction: column;
 }
 
 .service-box:hover {
-    transform: translateY(-15px);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.12);
-    background-color: #dcdcdc;
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+}
+
+.service-box h3 {
+    font-family: var(--font-poppins);
+    font-size: 1.4rem;
+    color: #111;
+    margin-bottom: 15px;
+}
+
+.service-box p {
+    color: #555;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 25px;
+    flex-grow: 1; /* Pushes the list to the bottom evenly */
+}
+
+.service-box h4 {
+    font-family: var(--font-poppins);
+    font-size: 1rem;
+    color: var(--accent-color);
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.service-box ul {
+    list-style: none;
+    padding: 0;
+}
+
+.service-box ul li {
+    font-size: 0.9rem;
+    color: #444;
+    margin-bottom: 8px;
+    position: relative;
+    padding-left: 20px;
+}
+
+.service-box ul li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--accent-color);
+    font-weight: bold;
 }
 
 /* Approach */
@@ -752,8 +797,12 @@ a:hover {
         align-items: center;
     }
     .testimonial-box {
-        width: 100%;
-        max-width: 574px;
+        height: auto;
+        padding-bottom: 20px;
+    }
+    
+    .services-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
@@ -830,3 +879,10 @@ a:hover {
         max-width: 374px;
     }
 }
+
+@media (max-width: 768px) {
+    .services-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
