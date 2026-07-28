@@ -512,7 +512,6 @@ a:hover {
     font-size: 0.95rem;
     line-height: 1.6;
     margin-bottom: 25px;
-    flex-grow: 1; /* Pushes the list to the bottom evenly */
 }
 
 .service-box h4 {
