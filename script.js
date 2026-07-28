@@ -80,25 +80,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const imgs = document.querySelectorAll('.img');
 
     if (dragger && ring && imgs.length > 0 && typeof gsap !== 'undefined') {
-        let xPos = 0;
-
-        function getBgPos(i){ 
-            let rotY = gsap.getProperty(ring, 'rotationY');
-            if (typeof rotY !== 'number') rotY = 180;
-            return ( -gsap.utils.wrap(0,360, rotY - 180 - i*36)/360*400 )+'px 0px';
-        }
-
         // Safely initialize each image instead of relying on timeline .set
         gsap.set(dragger, { opacity:0 });
         gsap.set(ring, { rotationY: 180 });
         
+        // Use a much larger radius to create gaps between the images and a wider concave curve
+        let radius = window.innerWidth < 768 ? 400 : 800;
+        
         imgs.forEach((img, i) => {
             gsap.set(img, {
                 rotateY: i * -36,
-                transformOrigin: '50% 50% 500px',
-                z: -500,
+                transformOrigin: `50% 50% ${radius}px`,
+                z: -radius,
                 backgroundImage: 'url(./Assets/img' + ((i % 7) + 1) + '.png)',
-                backgroundPosition: getBgPos(i),
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
                 backfaceVisibility: 'hidden'
             });
         });
@@ -134,8 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             gsap.to(ring, {
               rotationY: targetRotY,
-              duration: 0.2, // Smooth inertia feel
-              onUpdate: ()=>{ gsap.set('.img', { backgroundPosition:(i)=>getBgPos(i) }) }
+              duration: 0.2 // Smooth inertia feel
             });
         });
 
