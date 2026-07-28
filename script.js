@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 rotateY: i * -36,
                 transformOrigin: '50% 50% 500px',
                 z: -500,
-                backgroundImage: 'url(./assets/img' + ((i % 7) + 1) + '.png)',
+                backgroundImage: 'url(./Assets/img' + ((i % 7) + 1) + '.png)',
                 backgroundPosition: getBgPos(i),
                 backfaceVisibility: 'hidden'
             });
