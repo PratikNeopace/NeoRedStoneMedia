@@ -360,6 +360,24 @@ a:hover {
 }
 .dragger:active { cursor: grabbing; }
 
+/* Who We Are */
+.who-we-are {
+    padding: 100px 0 20px;
+}
+
+.who-we-are-content {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.who-we-are-content p {
+    font-size: 1.15rem;
+    color: #555;
+    line-height: 1.8;
+    margin-bottom: 25px;
+    font-family: var(--font-main);
+}
+
 /* Work Portfolio */
 .work {
     padding: 100px 0;
