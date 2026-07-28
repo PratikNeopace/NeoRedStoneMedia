@@ -80,18 +80,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const imgs = document.querySelectorAll('.img');
 
     if (dragger && ring && imgs.length > 0 && typeof gsap !== 'undefined') {
-        // Safely initialize each image instead of relying on timeline .set
+        // Safely initialize each image
         gsap.set(dragger, { opacity:0 });
-        gsap.set(ring, { rotationY: 180 });
+        gsap.set(ring, { rotationY: 0 }); // Start looking at the front of the concave cylinder
         
         // Use a much larger radius to create gaps between the images and a wider concave curve
         let radius = window.innerWidth < 768 ? 400 : 800;
         
         imgs.forEach((img, i) => {
             gsap.set(img, {
-                rotateY: i * -36,
-                transformOrigin: `50% 50% ${radius}px`,
-                z: -radius,
+                // By applying rotateY FIRST, then translateZ(-radius), 
+                // we push the images OUTWARDS from the center while they face INWARDS.
+                // This guarantees a perfect concave room/cylinder effect.
+                transform: `rotateY(${i * -36}deg) translateZ(${-radius}px)`,
                 backgroundImage: 'url(./Assets/img' + ((i % 7) + 1) + '.png)',
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
@@ -111,7 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Custom Vanilla JS drag handler to bypass Chrome's file:/// Draggable CORS issue
         let isDragging = false;
         let startX = 0;
-        let currentRotY = 180; // Starting rotation
+        let currentRotY = 0; // Starting rotation
 
         dragger.addEventListener('pointerdown', (e) => {
             isDragging = true;
