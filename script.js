@@ -89,10 +89,9 @@ document.addEventListener('DOMContentLoaded', () => {
         
         imgs.forEach((img, i) => {
             gsap.set(img, {
-                // By applying rotateY FIRST, then translateZ(-radius), 
-                // we push the images OUTWARDS from the center while they face INWARDS.
-                // This guarantees a perfect concave room/cylinder effect.
-                transform: `rotateY(${i * -36}deg) translateZ(${-radius}px)`,
+                rotateY: i * -36,
+                transformOrigin: `50% 50% ${radius}px`,
+                z: -radius,
                 backgroundImage: 'url(./Assets/img' + ((i % 7) + 1) + '.png)',
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
