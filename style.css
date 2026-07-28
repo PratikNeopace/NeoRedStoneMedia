@@ -786,7 +786,7 @@ a:hover {
         font-size: 4rem;
     }
     .floating-images {
-        display: none; 
+        transform: translate(-50%, -50%) scale(0.4); 
     }
     .hero {
         padding-bottom: 100px;
@@ -795,6 +795,18 @@ a:hover {
     .partners-container {
         flex-direction: column;
         text-align: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .roster-wrapper .stage {
+        transform: scale(0.45);
+    }
+    .hero-title {
+        font-size: 3.5rem;
+    }
+    .floating-images {
+        transform: translate(-50%, -50%) scale(0.3);
     }
 }
 
