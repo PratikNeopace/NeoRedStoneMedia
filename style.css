@@ -155,11 +155,11 @@ a:hover {
 
 /* Hero Section */
 .hero {
+    min-height: 100vh;
     padding: 80px 0 120px; 
     text-align: center;
     position: relative;
     overflow: hidden; /* Contains images strictly within the hero section (grey background) */
-    min-height: 850px;
     display: flex;
     align-items: center;
     justify-content: center;
