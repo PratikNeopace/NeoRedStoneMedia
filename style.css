@@ -361,21 +361,61 @@ a:hover {
 .dragger:active { cursor: grabbing; }
 
 /* Who We Are */
+/* Who We Are */
 .who-we-are {
-    padding: 100px 0 20px;
+    padding: 20px 0 100px; /* Space from roster */
+}
+
+.who-we-are-card {
+    background-color: var(--primary-color); /* Premium Dark */
+    padding: 80px 60px;
+    border-radius: 30px;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Subtle glow behind the card content */
+.who-we-are-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(209,50,57,0.05) 0%, rgba(26,26,26,0) 60%);
+    pointer-events: none;
+}
+
+.who-we-are-card .section-title {
+    margin-bottom: 40px;
+    position: relative;
+    z-index: 2;
 }
 
 .who-we-are-content {
     max-width: 900px;
     margin: 0 auto;
+    position: relative;
+    z-index: 2;
 }
 
 .who-we-are-content p {
-    font-size: 1.15rem;
-    color: #555;
+    font-size: 1.25rem;
+    color: #e0e0e0;
     line-height: 1.8;
     margin-bottom: 25px;
     font-family: var(--font-main);
+}
+
+@media (max-width: 768px) {
+    .who-we-are-card {
+        padding: 50px 30px;
+        border-radius: 20px;
+    }
+    .who-we-are-content p {
+        font-size: 1.05rem;
+    }
 }
 
 /* Work Portfolio */
