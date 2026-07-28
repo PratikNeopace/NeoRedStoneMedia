@@ -338,11 +338,84 @@
         </div>
     </section>
 
-    <!-- QYOU Media Section -->
-    <section class="qyou-media">
-        <div class="container text-center">
-            <h2 class="qyou-title reveal-up">A QYOU MEDIA COMPANY</h2>
-            <button class="btn-qyou reveal-up delay-2"><span class="arrow">→</span> Visit QYou Website</button>
+    <!-- Contact Details Section -->
+    <section id="contact" class="contact-section">
+        <div class="container contact-container reveal-up delay-1">
+            
+            <!-- Left Side: Info -->
+            <div class="contact-left">
+                <h2 class="contact-heading">Get in touch</h2>
+                <p class="contact-desc">Use our contact form for all information requests or contact us directly using the contact information below.</p>
+                <p class="contact-desc">Feel free to get in touch with us via email or phone</p>
+                
+                <hr class="contact-divider">
+                
+                <div class="contact-info-block">
+                    <div class="contact-icon">📍</div>
+                    <div class="contact-info-text">
+                        <h4>Our Office Location</h4>
+                        <p>
+                            <a href="https://www.google.com/maps/search/?api=1&query=Swapnali+HSG+Society,+G.A.+Kulkarni+Road,+Kothrud,+Pune,+Maharashtra+411038,+India" target="_blank" rel="noopener noreferrer">
+                                Office No. 403, Swapnali HSG Society,<br>
+                                G.A. Kulkarni Road, Opp. Wadeshwar Restaurant,<br>
+                                Kothrud, Pune – 411038, Maharashtra, India.
+                            </a>
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="contact-info-block">
+                    <div class="contact-icon">📞</div>
+                    <div class="contact-info-text">
+                        <h4>Phone</h4>
+                        <p><a href="tel:+919119590511">+91 9119590511</a></p>
+                    </div>
+                </div>
+
+                <div class="contact-info-block">
+                    <div class="contact-icon">✉️</div>
+                    <div class="contact-info-text">
+                        <h4>Email</h4>
+                        <p><a href="mailto:director@neoredstonemedia.com">director@neoredstonemedia.com</a></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side: Form -->
+            <div class="contact-right">
+                <div class="contact-form-card">
+                    <h3>Get started with a free quotation</h3>
+                    <!-- FormSubmit API points exactly to the requested email -->
+                    <form action="https://formsubmit.co/director@neoredstonemedia.com" method="POST" class="contact-form">
+                        <!-- Disabling captcha and setting subject -->
+                        <input type="hidden" name="_captcha" value="false">
+                        <input type="hidden" name="_subject" value="New Website Inquiry">
+                        
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" id="name" name="name" placeholder="Enter your Name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" placeholder="Enter a valid email address" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" placeholder="Enter your message" rows="4" required></textarea>
+                        </div>
+                        
+                        <div class="form-checkbox">
+                            <input type="checkbox" id="terms" name="terms" required>
+                            <label for="terms">I accept the <a href="#">Terms of Service</a></label>
+                        </div>
+                        
+                        <button type="submit" class="btn-submit">Submit your request</button>
+                    </form>
+                </div>
+            </div>
+            
         </div>
     </section>
 
