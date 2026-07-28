@@ -80,31 +80,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const imgs = document.querySelectorAll('.img');
 
     if (dragger && ring && imgs.length > 0 && typeof gsap !== 'undefined') {
-        // Safely initialize each image
+        // Safely initialize the ring
         gsap.set(dragger, { opacity:0 });
         gsap.set(ring, { rotationY: 0 }); // Start looking at the front of the concave cylinder
         
-        // Use a much larger radius to create gaps between the images and a wider concave curve
-        let radius = window.innerWidth < 768 ? 400 : 800;
+        let radius = window.innerWidth < 768 ? 400 : 550; // Tighter radius for extreme perspective
         
         imgs.forEach((img, i) => {
-            gsap.set(img, {
-                rotateY: i * -36,
-                transformOrigin: `50% 50% ${radius}px`,
-                z: -radius,
-                backgroundImage: 'url(./Assets/img' + ((i % 7) + 1) + '.png)',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                backfaceVisibility: 'hidden'
-            });
+            // Use pure Vanilla JS to set the transform.
+            // DO NOT use GSAP for this, because GSAP's matrix parser will re-order 
+            // the translation and rotation, destroying the concave layout!
+            img.style.transform = `rotateY(${i * -36}deg) translateZ(${-radius}px)`;
+            img.style.backgroundImage = 'url(./Assets/img' + ((i % 7) + 1) + '.png)';
+            img.style.backgroundSize = 'cover';
+            img.style.backgroundPosition = 'center';
+            img.style.backfaceVisibility = 'hidden';
+            img.style.borderRadius = '20px'; // Soft corners like the reference
         });
 
-        // Now animate them in
-        gsap.from('.img', {
+        // Now animate the ENTIRE RING in, instead of the individual images.
+        // This protects the raw CSS transforms on the images from being parsed by GSAP.
+        gsap.from(ring, {
             duration: 1.5,
             y: 200,
             opacity: 0,
-            stagger: 0.1,
             ease: 'expo'
         });
 

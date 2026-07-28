@@ -331,12 +331,12 @@ a:hover {
     display: flex;
     justify-content: center;
     align-items: center;
-    perspective: 900px; /* Tighter perspective for dramatic size difference */
+    perspective: 500px; /* Extreme perspective for dramatic size difference */
 }
 
 .ring {
-    width: 250px; /* Narrower width to allow gaps between the 10 images */
-    height: 380px; /* Portrait aspect ratio */
+    width: 320px; /* Wider/Taller portrait aspect ratio */
+    height: 450px;
     transform-style: preserve-3d;
     position: relative;
 }
