@@ -409,6 +409,20 @@ a:hover {
 }
 
 @media (max-width: 768px) {
+    .nav {
+        display: none; /* Hide standard nav on mobile */
+    }
+    
+    .floating-images {
+        display: none; /* Hide massive floating images to prevent horizontal scroll */
+    }
+
+    .logos-strip {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+    }
+
     .who-we-are-card {
         padding: 50px 30px;
         border-radius: 20px;
@@ -416,6 +430,7 @@ a:hover {
     .who-we-are-content p {
         font-size: 1.05rem;
     }
+
 }
 
 /* Work Portfolio */
