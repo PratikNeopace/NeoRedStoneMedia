@@ -247,4 +247,39 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // --- NEW: AJAX Form Submission ---
+    const contactForm = document.querySelector('.contact-form');
+    if (contactForm) {
+        contactForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            
+            const submitBtn = contactForm.querySelector('.btn-submit');
+            const originalBtnText = submitBtn.textContent;
+            submitBtn.textContent = 'Sending...';
+            submitBtn.style.pointerEvents = 'none';
+
+            fetch(contactForm.action, {
+                method: 'POST',
+                body: new FormData(contactForm),
+                headers: {
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                // FormSubmit responds with JSON on success if Accept header is set
+                alert('Message sent successfully! We will get back to you soon.');
+                contactForm.reset();
+                submitBtn.textContent = originalBtnText;
+                submitBtn.style.pointerEvents = 'auto';
+            })
+            .catch(error => {
+                console.error(error);
+                alert('There was an issue sending your message. Please try again.');
+                submitBtn.textContent = originalBtnText;
+                submitBtn.style.pointerEvents = 'auto';
+            });
+        });
+    }
 });
