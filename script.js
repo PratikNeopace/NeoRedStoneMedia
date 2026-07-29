@@ -194,8 +194,8 @@ document.addEventListener('DOMContentLoaded', () => {
         ];
         
         const numCards = images.length;
-        let radius = 1500;
-        let anglePerCard = 8.4;
+        let radius = 1000;
+        let anglePerCard = 13.8;
         const cards = [];
         
         if(dragger) gsap.set(dragger, { opacity:0 });
@@ -211,9 +211,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         function layoutCards() {
             const isMobile = window.innerWidth < 768;
-            radius = isMobile ? 1000 : 1500;
-            // Exactly matching 220px card width to remove all gap
-            anglePerCard = isMobile ? 12.6 : 8.4;
+            // Smaller radius = much tighter curve
+            radius = isMobile ? 700 : 1000;
+            // 240px arc length (220px width + 20px gap) on 1000px radius = 13.75 degrees
+            anglePerCard = isMobile ? 19.6 : 13.8;
             
             // Center the gallery
             const centerIndex = (numCards - 1) / 2;
@@ -221,19 +222,19 @@ document.addEventListener('DOMContentLoaded', () => {
             cards.forEach((card, i) => {
                 const angle = (i - centerIndex) * anglePerCard;
                 
-                // Concave cylinder: Pivot is AT the camera (Z = +radius)
-                // By only setting transformOrigin and rotationY, the radius is exactly 'radius'
+                // Concave cylinder: Pivot is AT the camera (Z = +radius), card is pushed AWAY (Z = -radius)
                 gsap.set(card, {
                     transformOrigin: `50% 50% ${radius}px`,
                     rotationY: -angle, // Invert angle for concave
+                    z: -radius,
                     y: 150,
                     opacity: 0,
                     scale: 0.8
                 });
             });
             
-            // The center card naturally sits at Z=0, so the ring stays at Z=0
-            gsap.set(rosterRing, { z: 0, rotationY: 0, rotationX: 0, x: 0, y: 0 });
+            // Pull the ring forward so the center card is visible at Z=0
+            gsap.set(rosterRing, { z: radius, rotationY: 0, rotationX: 0, x: 0, y: 0 });
         }
         
         layoutCards();
@@ -278,11 +279,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const deltaX = (e.clientX - startX) * 0.2;
                 let targetRotY = currentRotY - deltaX;
                 
-                // Clamp rotation so the last photo stops near the margin
+                // Clamp rotation so you can't scroll past the first/last photo
                 const centerIndex = (numCards - 1) / 2;
-                // Fixed 2.8 card offset guarantees it never freezes on ultra-wide screens
-                // and perfectly positions the last card near the margin on standard screens.
-                const maxRotY = (centerIndex - 2.8) * anglePerCard;
+                const maxRotY = centerIndex * anglePerCard;
                 const minRotY = -maxRotY;
                 targetRotY = gsap.utils.clamp(minRotY, maxRotY, targetRotY);
                 
@@ -307,9 +306,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const currentRotY = gsap.getProperty(rosterRing, 'rotationY');
                 let targetRotY = currentRotY - delta * 0.1;
                 
-                // Clamp rotation so the last photo stops near the margin
+                // Clamp rotation so you can't scroll past the first/last photo
                 const centerIndex = (numCards - 1) / 2;
-                const maxRotY = (centerIndex - 2.8) * anglePerCard;
+                const maxRotY = centerIndex * anglePerCard;
                 const minRotY = -maxRotY;
                 targetRotY = gsap.utils.clamp(minRotY, maxRotY, targetRotY);
                 
