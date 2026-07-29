@@ -193,17 +193,17 @@ document.addEventListener('DOMContentLoaded', () => {
         
         let radius = window.innerWidth < 768 ? 400 : 550; // Tighter radius for extreme perspective
         
+        // Push the entire ring backwards so the front card sits at the screen plane
+        gsap.set(ring, { z: -radius });
+
         imgs.forEach((img, i) => {
-            gsap.set(img, {
-                rotateY: i * -36,
-                transformOrigin: `50% 50% ${radius}px`,
-                z: -radius,
-                backgroundImage: 'url(./Assets/img' + ((i % 7) + 1) + '.png)',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                backfaceVisibility: 'hidden',
-                borderRadius: '20px'
-            });
+            // Rotate the card, then push it OUTWARDS by radius
+            img.style.transform = `rotateY(${i * -36}deg) translateZ(${radius}px)`;
+            img.style.backgroundImage = 'url(./Assets/img' + ((i % 7) + 1) + '.png)';
+            img.style.backgroundSize = 'cover';
+            img.style.backgroundPosition = 'center';
+            img.style.backfaceVisibility = 'hidden';
+            img.style.borderRadius = '20px';
         });
 
         // Now animate the ENTIRE RING in, instead of the individual images.
