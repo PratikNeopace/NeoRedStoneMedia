@@ -276,7 +276,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (!isDragging) return;
                 // Calculate drag distance (multiplier adjusts speed)
                 const deltaX = (e.clientX - startX) * 0.2;
-                const targetRotY = currentRotY - deltaX;
+                let targetRotY = currentRotY - deltaX;
+                
+                // Clamp rotation to prevent scrolling past first/last photo
+                const centerIndex = (numCards - 1) / 2;
+                const maxRotY = centerIndex * anglePerCard;
+                const minRotY = -maxRotY;
+                targetRotY = gsap.utils.clamp(minRotY, maxRotY, targetRotY);
                 
                 gsap.to(rosterRing, {
                   rotationY: targetRotY,
@@ -297,8 +303,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Only rotate if scrolling horizontally, or fallback to vertical
                 const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
                 const currentRotY = gsap.getProperty(rosterRing, 'rotationY');
+                let targetRotY = currentRotY - delta * 0.1;
+                
+                // Clamp rotation to prevent scrolling past first/last photo
+                const centerIndex = (numCards - 1) / 2;
+                const maxRotY = centerIndex * anglePerCard;
+                const minRotY = -maxRotY;
+                targetRotY = gsap.utils.clamp(minRotY, maxRotY, targetRotY);
+                
                 gsap.to(rosterRing, {
-                  rotationY: currentRotY - delta * 0.1,
+                  rotationY: targetRotY,
                   duration: 0.3,
                   ease: "power2.out"
                 });
