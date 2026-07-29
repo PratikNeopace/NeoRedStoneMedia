@@ -248,9 +248,22 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- NEW: AJAX Form Submission ---
+    // --- NEW: AJAX Form Submission with Security ---
     const contactForm = document.querySelector('.contact-form');
     if (contactForm) {
+        // Record load time for anti-spam minimum time check
+        const loadTimeInput = document.getElementById('load_time');
+        if (loadTimeInput) {
+            loadTimeInput.value = Math.floor(Date.now() / 1000);
+        }
+
+        // Generate CSRF Double-Submit Cookie (basic implementation for static sites)
+        const generateToken = () => {
+            return Math.random().toString(36).substring(2) + Date.now().toString(36);
+        };
+        const csrfToken = generateToken();
+        document.cookie = `csrf_token=${csrfToken}; path=/; SameSite=Strict`;
+
         contactForm.addEventListener('submit', function (e) {
             e.preventDefault();
             
@@ -263,20 +276,29 @@ document.addEventListener('DOMContentLoaded', () => {
                 method: 'POST',
                 body: new FormData(contactForm),
                 headers: {
-                    'Accept': 'application/json'
+                    'Accept': 'application/json',
+                    'X-CSRF-Token': csrfToken
                 }
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok && response.status !== 400 && response.status !== 429 && response.status !== 403) {
+                    throw new Error('Server error');
+                }
+                return response.json();
+            })
             .then(data => {
-                // FormSubmit responds with JSON on success if Accept header is set
-                alert('Message sent successfully! We will get back to you soon.');
-                contactForm.reset();
-                submitBtn.textContent = originalBtnText;
-                submitBtn.style.pointerEvents = 'auto';
+                if (data.success) {
+                    alert('Your enquiry has been sent successfully.\\n\\nWe will contact you shortly.');
+                    contactForm.reset();
+                } else {
+                    alert(data.message || 'Something went wrong.\\n\\nPlease try again.');
+                }
             })
             .catch(error => {
-                console.error(error);
-                alert('There was an issue sending your message. Please try again.');
+                console.error('Mail Error:', error);
+                alert('Something went wrong.\\n\\nPlease try again.');
+            })
+            .finally(() => {
                 submitBtn.textContent = originalBtnText;
                 submitBtn.style.pointerEvents = 'auto';
             });

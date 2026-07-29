@@ -102,10 +102,10 @@
         </div>
     </section>
 
-    <!-- Represent Roster -->
+    <!-- Latest Media Work -->
     <section id="roster" class="roster">
         <div class="container text-center">
-            <h2 class="section-title reveal-up">Represent Roster</h2>
+            <h2 class="section-title reveal-up">Latest Media Work</h2>
             <div class="roster-wrapper">
                 <div class="stage">
                     <div class="dragger"></div>
@@ -147,14 +147,11 @@
         <div class="container">
             <h2 class="section-title reveal-up">Work to be noticed</h2>
             <div class="work-grid">
-                <div class="work-item w1 reveal-up delay-1"><img src="https://picsum.photos/400/300?random=20" alt="Work 1"></div>
-                <div class="work-item w2 reveal-up delay-2"><img src="https://picsum.photos/400/300?random=21" alt="Work 2"></div>
-                <div class="work-item w3 reveal-up delay-3"><img src="https://picsum.photos/600/400?random=22" alt="Work 3"></div>
-                <div class="work-item w4 reveal-up delay-1"><img src="https://picsum.photos/400/300?random=23" alt="Work 4"></div>
-                <div class="work-item w5 reveal-up delay-2"><img src="https://picsum.photos/400/300?random=24" alt="Work 5"></div>
-                <div class="work-item w6 reveal-up delay-4"><img src="https://picsum.photos/400/300?random=25" alt="Work 6"></div>
-                <div class="work-item w7 reveal-up delay-2"><img src="https://picsum.photos/400/300?random=26" alt="Work 7"></div>
-                <div class="work-item w8 reveal-up delay-3"><img src="https://picsum.photos/400/300?random=27" alt="Work 8"></div>
+                <div class="work-item w1 reveal-up delay-1"><img src="./Assets/portfolio1.png" alt="Flyer App"></div>
+                <div class="work-item w2 reveal-up delay-2"><img src="./Assets/portfolio2.png" alt="Masala Moods"></div>
+                <div class="work-item w3 reveal-up delay-3"><img src="./Assets/portfolio3.png" alt="KPIT Brochure"></div>
+                <div class="work-item w4 reveal-up delay-1"><img src="./Assets/portfolio4.png" alt="Website Mockup"></div>
+                <div class="work-item w5 reveal-up delay-2"><img src="./Assets/portfolio5.png" alt="Tea and Tasty Bites"></div>
             </div>
         </div>
     </section>
@@ -386,11 +383,11 @@
             <div class="contact-right">
                 <div class="contact-form-card">
                     <h3>Get started with a free quotation</h3>
-                    <!-- Temporarily using naked email to trigger new FormSubmit token for info@ -->
-                    <form action="https://formsubmit.co/info@neoredstonemedia.com" method="POST" class="contact-form">
-                        <!-- Disabling captcha and setting subject -->
-                        <input type="hidden" name="_captcha" value="false">
-                        <input type="hidden" name="_subject" value="New Website Inquiry">
+                    <!-- Custom PHP Backend -->
+                    <form action="./send-mail.php" method="POST" class="contact-form">
+                        <!-- Security Fields -->
+                        <input type="hidden" name="load_time" id="load_time" value="">
+                        <input type="text" name="website_url" style="display:none" tabindex="-1" autocomplete="off">
                         
                         <div class="form-group">
                             <label for="name">Name</label>
