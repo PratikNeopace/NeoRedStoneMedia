@@ -359,7 +359,7 @@ a:hover {
     background-size: cover;
     background-position: center;
     border-radius: 12px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15); /* Decreased shadow */
     backface-visibility: hidden;
     will-change: transform;
 }
