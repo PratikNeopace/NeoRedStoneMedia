@@ -278,11 +278,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const deltaX = (e.clientX - startX) * 0.2;
                 let targetRotY = currentRotY - deltaX;
                 
-                // Clamp rotation so the last photo stops near the margin
+                // Clamp rotation so you can't scroll past the first/last photo
                 const centerIndex = (numCards - 1) / 2;
-                const marginOffset = Math.min(window.innerWidth / 2 - 140, radius - 10);
-                const marginAngle = Math.asin(marginOffset / radius) * (180 / Math.PI);
-                const maxRotY = Math.max(0, (centerIndex * anglePerCard) - marginAngle);
+                const maxRotY = centerIndex * anglePerCard;
                 const minRotY = -maxRotY;
                 targetRotY = gsap.utils.clamp(minRotY, maxRotY, targetRotY);
                 
@@ -307,11 +305,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const currentRotY = gsap.getProperty(rosterRing, 'rotationY');
                 let targetRotY = currentRotY - delta * 0.1;
                 
-                // Clamp rotation so the last photo stops near the margin
+                // Clamp rotation so you can't scroll past the first/last photo
                 const centerIndex = (numCards - 1) / 2;
-                const marginOffset = Math.min(window.innerWidth / 2 - 140, radius - 10);
-                const marginAngle = Math.asin(marginOffset / radius) * (180 / Math.PI);
-                const maxRotY = Math.max(0, (centerIndex * anglePerCard) - marginAngle);
+                const maxRotY = centerIndex * anglePerCard;
                 const minRotY = -maxRotY;
                 targetRotY = gsap.utils.clamp(minRotY, maxRotY, targetRotY);
                 
