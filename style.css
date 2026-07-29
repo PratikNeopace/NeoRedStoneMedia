@@ -345,8 +345,8 @@ a:hover {
 }
 
 .ring {
-    width: 260px; /* Smaller photo size */
-    height: 380px;
+    width: 220px; /* Reduced photo size */
+    height: 320px;
     transform-style: preserve-3d;
     position: relative;
     will-change: transform;

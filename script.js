@@ -194,8 +194,8 @@ document.addEventListener('DOMContentLoaded', () => {
         ];
         
         const numCards = images.length;
-        let radius = 1800;
-        let anglePerCard = 8.3;
+        let radius = 1500;
+        let anglePerCard = 9.2;
         const cards = [];
         
         if(dragger) gsap.set(dragger, { opacity:0 });
@@ -211,9 +211,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         function layoutCards() {
             const isMobile = window.innerWidth < 768;
-            radius = isMobile ? 1000 : 1800;
-            // 260px width on a 1800px radius = exactly 8.3 degrees of arc.
-            anglePerCard = isMobile ? 14.9 : 8.3; // Zero spacing calculation
+            radius = isMobile ? 1000 : 1500;
+            // 240px arc length (220px width + 20px gap) on 1500px radius = 9.16 degrees
+            anglePerCard = isMobile ? 13.75 : 9.2;
             
             // Center the gallery
             const centerIndex = (numCards - 1) / 2;
