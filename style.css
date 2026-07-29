@@ -345,8 +345,8 @@ a:hover {
 }
 
 .ring {
-    width: 320px; /* Wider/Taller portrait aspect ratio */
-    height: 450px;
+    width: 260px; /* Smaller photo size */
+    height: 380px;
     transform-style: preserve-3d;
     position: relative;
     will-change: transform;
