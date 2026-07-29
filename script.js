@@ -181,73 +181,133 @@ document.addEventListener('DOMContentLoaded', () => {
         requestAnimationFrame(render);
     }
 
-    // --- NEW: GSAP 3D Draggable Carousel for Represent Roster ---
-    const dragger = document.querySelector('.dragger');
-    const ring = document.querySelector('.ring');
-    const imgs = document.querySelectorAll('.img');
-
-    if (dragger && ring && imgs.length > 0 && typeof gsap !== 'undefined') {
-        // Safely initialize the ring
-        gsap.set(dragger, { opacity:0 });
-        gsap.set(ring, { rotationY: 0 }); // Start looking at the front of the concave cylinder
+    // --- NEW: CHTRBOX-style Curved Gallery for Represent Roster ---
+    const rosterRing = document.getElementById('roster-ring');
+    if (rosterRing && typeof gsap !== 'undefined') {
+        const images = [
+            './Assets/img1.png', './Assets/img2.png', './Assets/img3.png',
+            './Assets/img4.png', './Assets/img5.png', './Assets/img6.png',
+            './Assets/img7.png', './Assets/portfolio1.png', './Assets/portfolio2.png',
+            './Assets/portfolio3.png', './Assets/portfolio4.png', './Assets/portfolio5.png'
+        ];
         
-        let radius = window.innerWidth < 768 ? 400 : 550; // Perfect radius for Convex layout
+        const numCards = images.length;
+        let radius = 2500;
+        let zCenter = 1000;
+        let maxAngle = 45; // Degrees from center to edge (total 90 spread)
+        const cards = [];
         
-        // Push the entire ring backwards so the front card sits near the screen plane
-        gsap.set(ring, { z: -radius });
-
-        imgs.forEach((img, i) => {
-            // Convex cylinder: rotate first, then push OUTWARDS by radius
-            // MUST use raw CSS to prevent GSAP from re-ordering translate before rotate!
-            img.style.transform = `rotateY(${i * -36}deg) translateZ(${radius}px)`;
-            img.style.backgroundImage = 'url(./Assets/img' + ((i % 7) + 1) + '.png)';
-            img.style.backgroundSize = 'cover';
-            img.style.backgroundPosition = 'center';
-            img.style.backfaceVisibility = 'hidden';
-            img.style.borderRadius = '20px';
+        // Generate cards
+        images.forEach((src) => {
+            const img = document.createElement('div');
+            img.className = 'img';
+            img.style.backgroundImage = `url(${src})`;
+            rosterRing.appendChild(img);
+            cards.push(img);
         });
 
-        // Now animate the ENTIRE RING in, instead of the individual images.
-        // This protects the raw CSS transforms on the images from being parsed by GSAP.
-        gsap.from(ring, {
-            duration: 1.5,
-            y: 200,
-            opacity: 0,
-            ease: 'expo'
-        });
-
-        // Custom Vanilla JS drag handler to bypass Chrome's file:/// Draggable CORS issue
-        let isDragging = false;
-        let startX = 0;
-        let currentRotY = 0; // Starting rotation
-
-        dragger.addEventListener('pointerdown', (e) => {
-            isDragging = true;
-            startX = e.clientX;
-            dragger.style.cursor = 'grabbing';
-            // Snap the current state of rotation in case it's mid-tween
-            currentRotY = gsap.getProperty(ring, 'rotationY');
-        });
-
-        window.addEventListener('pointermove', (e) => {
-            if (!isDragging) return;
+        function layoutCards() {
+            const isMobile = window.innerWidth < 768;
+            radius = isMobile ? 800 : 2000;
+            zCenter = isMobile ? 0 : 800;
+            maxAngle = isMobile ? 55 : 40;
             
-            // Calculate how far the mouse has moved, multiplying by 2.5 for faster rotation
-            const deltaX = (e.clientX - startX) * 2.5;
-            const targetRotY = currentRotY - deltaX;
-            
-            gsap.to(ring, {
-              rotationY: targetRotY,
-              duration: 0.2 // Smooth inertia feel
+            cards.forEach((card, i) => {
+                const progress = numCards > 1 ? i / (numCards - 1) : 0.5;
+                const theta = -maxAngle + (progress * 2 * maxAngle);
+                const thetaRad = theta * (Math.PI / 180);
+                
+                // Concave curve: Center is far, sides curve forward towards user
+                const x = radius * Math.sin(thetaRad);
+                const z = zCenter - radius * Math.cos(thetaRad);
+                const rotateY = -theta;
+                
+                card.dataset.x = x;
+                card.dataset.z = z;
+                card.dataset.rotateY = rotateY;
+                
+                // Initial hidden state for entrance animation
+                gsap.set(card, {
+                    x: x,
+                    y: 100,
+                    z: z - 500, // pushed further back
+                    rotationY: rotateY + (Math.random() * 20 - 10), // slight random twist
+                    opacity: 0,
+                    transformStyle: "preserve-3d",
+                    force3D: true
+                });
             });
+        }
+        
+        layoutCards();
+        window.addEventListener('resize', layoutCards);
+
+        // Entrance Animation
+        ScrollTrigger.create({
+            trigger: ".roster-wrapper",
+            start: "top 70%",
+            onEnter: () => {
+                cards.forEach((card, i) => {
+                    gsap.to(card, {
+                        duration: 1.5,
+                        x: parseFloat(card.dataset.x),
+                        y: 0,
+                        z: parseFloat(card.dataset.z),
+                        rotationY: parseFloat(card.dataset.rotateY),
+                        opacity: 1,
+                        ease: "power4.out",
+                        delay: i * 0.05
+                    });
+                });
+            },
+            once: true
         });
 
-        window.addEventListener('pointerup', () => {
-            if(isDragging) {
-                isDragging = false;
-                dragger.style.cursor = 'grab';
-            }
-        });
+        // Mouse Interaction & Ambient Motion
+        let mouseX = 0;
+        let mouseY = 0;
+        let targetMouseX = 0;
+        let targetMouseY = 0;
+        let time = 0;
+
+        const rosterStage = document.querySelector('.roster .stage');
+        if (rosterStage) {
+            rosterStage.addEventListener('mousemove', (e) => {
+                const rect = rosterStage.getBoundingClientRect();
+                targetMouseX = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+                targetMouseY = ((e.clientY - rect.top) / rect.height) * 2 - 1;
+            });
+
+            rosterStage.addEventListener('mouseleave', () => {
+                targetMouseX = 0;
+                targetMouseY = 0;
+            });
+        }
+
+        // Use quickSetter for performance
+        const setRotY = gsap.quickSetter(rosterRing, "rotationY", "deg");
+        const setRotX = gsap.quickSetter(rosterRing, "rotationX", "deg");
+        const setX = gsap.quickSetter(rosterRing, "x", "px");
+        const setY = gsap.quickSetter(rosterRing, "y", "px");
+
+        function renderRoster() {
+            time += 0.005;
+            
+            // Lerp mouse for springy feel
+            mouseX += (targetMouseX - mouseX) * 0.05;
+            mouseY += (targetMouseY - mouseY) * 0.05;
+            
+            // Apply restrained motion
+            setRotY(mouseX * 4);
+            setRotX(-mouseY * 4);
+            setX(mouseX * 15);
+            
+            // Ambient breathing + mouse Y translation
+            setY(mouseY * 15 + Math.sin(time) * 10);
+            
+            requestAnimationFrame(renderRoster);
+        }
+        renderRoster();
     }
 
     // --- NEW: AJAX Form Submission (FormSubmit) ---
