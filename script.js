@@ -278,12 +278,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 const deltaX = (e.clientX - startX) * 0.2;
                 let targetRotY = currentRotY - deltaX;
                 
-                // Clamp rotation so the last photo stops 30-40px after the margin
+                // Clamp rotation so the last photo stops near the margin
                 const centerIndex = (numCards - 1) / 2;
-                // We want the center of the last card to be ~150px inside the screen edge
-                const marginOffset = Math.min(window.innerWidth / 2 - 150, radius - 10);
-                const marginAngle = Math.asin(marginOffset / radius) * (180 / Math.PI);
-                const maxRotY = Math.max(0, (centerIndex * anglePerCard) - marginAngle);
+                // Fixed 2.8 card offset guarantees it never freezes on ultra-wide screens
+                // and perfectly positions the last card near the margin on standard screens.
+                const maxRotY = (centerIndex - 2.8) * anglePerCard;
                 const minRotY = -maxRotY;
                 targetRotY = gsap.utils.clamp(minRotY, maxRotY, targetRotY);
                 
@@ -308,11 +307,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const currentRotY = gsap.getProperty(rosterRing, 'rotationY');
                 let targetRotY = currentRotY - delta * 0.1;
                 
-                // Clamp rotation so the last photo stops 30-40px after the margin
+                // Clamp rotation so the last photo stops near the margin
                 const centerIndex = (numCards - 1) / 2;
-                const marginOffset = Math.min(window.innerWidth / 2 - 150, radius - 10);
-                const marginAngle = Math.asin(marginOffset / radius) * (180 / Math.PI);
-                const maxRotY = Math.max(0, (centerIndex * anglePerCard) - marginAngle);
+                const maxRotY = (centerIndex - 2.8) * anglePerCard;
                 const minRotY = -maxRotY;
                 targetRotY = gsap.utils.clamp(minRotY, maxRotY, targetRotY);
                 
