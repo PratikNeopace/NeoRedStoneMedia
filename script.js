@@ -221,19 +221,19 @@ document.addEventListener('DOMContentLoaded', () => {
             cards.forEach((card, i) => {
                 const angle = (i - centerIndex) * anglePerCard;
                 
-                // Concave cylinder: Pivot is AT the camera (Z = +radius), card is pushed AWAY (Z = -radius)
+                // Concave cylinder: Pivot is AT the camera (Z = +radius)
+                // By only setting transformOrigin and rotationY, the radius is exactly 'radius'
                 gsap.set(card, {
                     transformOrigin: `50% 50% ${radius}px`,
                     rotationY: -angle, // Invert angle for concave
-                    z: -radius,
                     y: 150,
                     opacity: 0,
                     scale: 0.8
                 });
             });
             
-            // Pull the ring forward so the center card is visible at Z=0
-            gsap.set(rosterRing, { z: radius, rotationY: 0, rotationX: 0, x: 0, y: 0 });
+            // The center card naturally sits at Z=0, so the ring stays at Z=0
+            gsap.set(rosterRing, { z: 0, rotationY: 0, rotationX: 0, x: 0, y: 0 });
         }
         
         layoutCards();
@@ -278,9 +278,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 const deltaX = (e.clientX - startX) * 0.2;
                 let targetRotY = currentRotY - deltaX;
                 
-                // Clamp rotation so you can't scroll past the first/last photo
+                // Clamp rotation so the last photo stops 30-40px after the margin
                 const centerIndex = (numCards - 1) / 2;
-                const maxRotY = centerIndex * anglePerCard;
+                // We want the center of the last card to be ~150px inside the screen edge
+                const marginOffset = Math.min(window.innerWidth / 2 - 150, radius - 10);
+                const marginAngle = Math.asin(marginOffset / radius) * (180 / Math.PI);
+                const maxRotY = Math.max(0, (centerIndex * anglePerCard) - marginAngle);
                 const minRotY = -maxRotY;
                 targetRotY = gsap.utils.clamp(minRotY, maxRotY, targetRotY);
                 
@@ -305,9 +308,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 const currentRotY = gsap.getProperty(rosterRing, 'rotationY');
                 let targetRotY = currentRotY - delta * 0.1;
                 
-                // Clamp rotation so you can't scroll past the first/last photo
+                // Clamp rotation so the last photo stops 30-40px after the margin
                 const centerIndex = (numCards - 1) / 2;
-                const maxRotY = centerIndex * anglePerCard;
+                const marginOffset = Math.min(window.innerWidth / 2 - 150, radius - 10);
+                const marginAngle = Math.asin(marginOffset / radius) * (180 / Math.PI);
+                const maxRotY = Math.max(0, (centerIndex * anglePerCard) - marginAngle);
                 const minRotY = -maxRotY;
                 targetRotY = gsap.utils.clamp(minRotY, maxRotY, targetRotY);
                 
