@@ -193,12 +193,12 @@ document.addEventListener('DOMContentLoaded', () => {
         
         let radius = window.innerWidth < 768 ? 400 : 550; // Tighter radius for extreme perspective
         
+        const angle = 360 / imgs.length; // Dynamically calculate based on number of images
         imgs.forEach((img, i) => {
             // Use pure Vanilla JS to set the transform.
-            // DO NOT use GSAP for this, because GSAP's matrix parser will re-order 
-            // the translation and rotation, destroying the concave layout!
-            img.style.transform = `rotateY(${i * -36}deg) translateZ(${-radius}px)`;
-            img.style.backgroundImage = 'url(./Assets/img' + ((i % 7) + 1) + '.png)';
+            img.style.transform = `rotateY(${i * -angle}deg) translateZ(${-radius}px)`;
+            // Map the images to portfolio1.png through portfolio5.png
+            img.style.backgroundImage = 'url(./Assets/portfolio' + (i + 1) + '.png)';
             img.style.backgroundSize = 'cover';
             img.style.backgroundPosition = 'center';
             img.style.backfaceVisibility = 'hidden';
