@@ -945,7 +945,7 @@ a:hover {
 
 .quote {
     font-size: 1.15rem;
-    color: #e0e0e0;
+    color: #000;
     line-height: 1.7;
     margin-bottom: 30px;
     font-style: italic;
@@ -973,14 +973,14 @@ a:hover {
 
 .client-info h4 {
     font-family: var(--font-poppins);
-    color: #fff;
+    color: #000;
     font-size: 1.1rem;
     font-weight: 600;
     margin-bottom: 2px;
 }
 
 .client-info span {
-    color: #a0a0a0;
+    color: #333;
     font-size: 0.9rem;
 }
 
