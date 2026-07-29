@@ -6,6 +6,9 @@
 
 session_start();
 header('Content-Type: application/json');
+header('Access-Control-Allow-Origin: *'); // Allow cross-origin for www vs non-www
+header('Access-Control-Allow-Methods: POST, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, Accept, X-CSRF-Token');
 
 // --- Configuration ---
 $config = [
@@ -40,6 +43,15 @@ function jsonResponse($success, $message, $code = 200) {
 
 function sanitizeInput($data) {
     return htmlspecialchars(stripslashes(trim($data)), ENT_QUOTES, 'UTF-8');
+}
+
+// --- CORS and Preflight Handling ---
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    header('Access-Control-Allow-Origin: *'); // Allow cross-origin for www vs non-www
+    header('Access-Control-Allow-Methods: POST, OPTIONS');
+    header('Access-Control-Allow-Headers: Content-Type, Accept, X-CSRF-Token');
+    http_response_code(200);
+    exit;
 }
 
 // Ensure the request is POST
