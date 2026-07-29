@@ -181,8 +181,10 @@ document.addEventListener('DOMContentLoaded', () => {
         requestAnimationFrame(render);
     }
 
-    // --- NEW: Convex Curved Carousel with Scroll-driven Rotation ---
+    // --- NEW: CHTRBOX-style Concave Curved Gallery with Dragging ---
     const rosterRing = document.getElementById('roster-ring');
+    const dragger = document.querySelector('.dragger');
+    
     if (rosterRing && typeof gsap !== 'undefined') {
         const images = [
             './Assets/img1.png', './Assets/img2.png', './Assets/img3.png',
@@ -192,9 +194,11 @@ document.addEventListener('DOMContentLoaded', () => {
         ];
         
         const numCards = images.length;
-        let radius = 1200;
-        let anglePerCard = 15;
+        let radius = 2000;
+        let anglePerCard = 12;
         const cards = [];
+        
+        if(dragger) gsap.set(dragger, { opacity:0 });
         
         // Generate cards
         images.forEach((src) => {
@@ -207,28 +211,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
         function layoutCards() {
             const isMobile = window.innerWidth < 768;
-            radius = isMobile ? 600 : 1200;
-            anglePerCard = isMobile ? 25 : 15;
+            radius = isMobile ? 1200 : 2200;
+            anglePerCard = isMobile ? 20 : 12; // Spread them wide to prevent overlap
             
-            // Center the gallery so the middle of the array is at 0 degrees (front)
+            // Center the gallery
             const centerIndex = (numCards - 1) / 2;
             
             cards.forEach((card, i) => {
                 const angle = (i - centerIndex) * anglePerCard;
                 
-                // Use GSAP's transformOrigin to build the Convex cylinder natively.
-                // The pivot is pushed BACKWARDS by radius, so the cards orbit around it!
+                // Concave cylinder: Pivot is AT the camera (Z = +radius), card is pushed AWAY (Z = -radius)
                 gsap.set(card, {
-                    transformOrigin: `50% 50% ${-radius}px`,
-                    rotationY: angle,
+                    transformOrigin: `50% 50% ${radius}px`,
+                    rotationY: -angle, // Invert angle for concave
+                    z: -radius,
                     y: 150,
                     opacity: 0,
                     scale: 0.8
                 });
             });
             
-            // The front card is at local Z=0, so the ring itself should stay at Z=0!
-            gsap.set(rosterRing, { z: 0, rotationY: 0 });
+            // Pull the ring forward so the center card is visible at Z=0
+            gsap.set(rosterRing, { z: radius, rotationY: 0, rotationX: 0, x: 0, y: 0 });
         }
         
         layoutCards();
@@ -251,59 +255,54 @@ document.addEventListener('DOMContentLoaded', () => {
             once: true
         });
 
-        // Scroll-driven rotation (The "Scrolling")
-        const totalRotation = (numCards - 1) * (window.innerWidth < 768 ? 25 : 15);
+        // Mouse Drag Interaction ("Scrolling with mouse")
+        let isDragging = false;
+        let startX = 0;
+        let currentRotY = 0; 
+
+        // Use the dragger element if it exists, otherwise use the stage
+        const dragTarget = dragger || document.querySelector('.roster .stage');
         
-        ScrollTrigger.create({
-            trigger: ".roster-wrapper",
-            start: "center center",
-            end: `+=${totalRotation * 10}`, // Scroll distance
-            pin: true,
-            scrub: 1,
-            animation: gsap.to(rosterRing, {
-                rotationY: -totalRotation,
-                ease: "none"
-            })
-        });
-
-        // Mouse Hover Interaction (Springy subtle motion)
-        let mouseX = 0;
-        let mouseY = 0;
-        let targetMouseX = 0;
-        let targetMouseY = 0;
-        let time = 0;
-
-        const rosterStage = document.querySelector('.roster .stage');
-        if (rosterStage) {
-            rosterStage.addEventListener('mousemove', (e) => {
-                const rect = rosterStage.getBoundingClientRect();
-                targetMouseX = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-                targetMouseY = ((e.clientY - rect.top) / rect.height) * 2 - 1;
+        if (dragTarget) {
+            dragTarget.addEventListener('pointerdown', (e) => {
+                isDragging = true;
+                startX = e.clientX;
+                dragTarget.style.cursor = 'grabbing';
+                currentRotY = gsap.getProperty(rosterRing, 'rotationY');
             });
 
-            rosterStage.addEventListener('mouseleave', () => {
-                targetMouseX = 0;
-                targetMouseY = 0;
+            window.addEventListener('pointermove', (e) => {
+                if (!isDragging) return;
+                // Calculate drag distance (multiplier adjusts speed)
+                const deltaX = (e.clientX - startX) * 0.2;
+                const targetRotY = currentRotY - deltaX;
+                
+                gsap.to(rosterRing, {
+                  rotationY: targetRotY,
+                  duration: 0.3, 
+                  ease: "power2.out"
+                });
             });
-        }
 
-        function renderRoster() {
-            time += 0.01;
-            mouseX += (targetMouseX - mouseX) * 0.1;
-            mouseY += (targetMouseY - mouseY) * 0.1;
-            
-            // Apply subtle translate and rotate to X/Y/Z directly on ring
-            // We DO NOT modify rotationY here because ScrollTrigger controls it!
-            gsap.set(rosterRing, {
-                x: mouseX * 20,
-                y: mouseY * 20 + Math.sin(time) * 10,
-                rotationX: -mouseY * 5,
-                rotationZ: mouseX * 2
+            window.addEventListener('pointerup', () => {
+                if(isDragging) {
+                    isDragging = false;
+                    dragTarget.style.cursor = 'grab';
+                }
             });
             
-            requestAnimationFrame(renderRoster);
+            // Optional: Mouse wheel scrolling to rotate
+            dragTarget.addEventListener('wheel', (e) => {
+                // Only rotate if scrolling horizontally, or fallback to vertical
+                const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+                const currentRotY = gsap.getProperty(rosterRing, 'rotationY');
+                gsap.to(rosterRing, {
+                  rotationY: currentRotY - delta * 0.1,
+                  duration: 0.3,
+                  ease: "power2.out"
+                });
+            }, { passive: true });
         }
-        renderRoster();
     }
 
     // --- NEW: AJAX Form Submission (FormSubmit) ---
