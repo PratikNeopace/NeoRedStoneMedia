@@ -230,8 +230,8 @@ document.addEventListener('DOMContentLoaded', () => {
         window.addEventListener('pointermove', (e) => {
             if (!isDragging) return;
             
-            // Calculate how far the mouse has moved
-            const deltaX = e.clientX - startX;
+            // Calculate how far the mouse has moved, multiplying by 2.5 for faster rotation
+            const deltaX = (e.clientX - startX) * 2.5;
             const targetRotY = currentRotY - deltaX;
             
             gsap.to(ring, {
