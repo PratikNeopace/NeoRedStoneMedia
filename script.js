@@ -181,7 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
         requestAnimationFrame(render);
     }
 
-    // --- NEW: CHTRBOX-style Curved Gallery for Represent Roster ---
+    // --- NEW: Convex Curved Carousel with Scroll-driven Rotation ---
     const rosterRing = document.getElementById('roster-ring');
     if (rosterRing && typeof gsap !== 'undefined') {
         const images = [
@@ -192,9 +192,8 @@ document.addEventListener('DOMContentLoaded', () => {
         ];
         
         const numCards = images.length;
-        let radius = 2500;
-        let zCenter = 1000;
-        let maxAngle = 45; // Degrees from center to edge (total 90 spread)
+        let radius = 1200;
+        let anglePerCard = 15;
         const cards = [];
         
         // Generate cards
@@ -208,35 +207,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
         function layoutCards() {
             const isMobile = window.innerWidth < 768;
-            radius = isMobile ? 800 : 2000;
-            zCenter = isMobile ? 0 : 800;
-            maxAngle = isMobile ? 55 : 40;
+            radius = isMobile ? 600 : 1200;
+            anglePerCard = isMobile ? 25 : 15;
+            
+            // Center the gallery so the middle of the array is at 0 degrees (front)
+            const centerIndex = (numCards - 1) / 2;
             
             cards.forEach((card, i) => {
-                const progress = numCards > 1 ? i / (numCards - 1) : 0.5;
-                const theta = -maxAngle + (progress * 2 * maxAngle);
-                const thetaRad = theta * (Math.PI / 180);
+                const angle = (i - centerIndex) * anglePerCard;
                 
-                // Concave curve: Center is far, sides curve forward towards user
-                const x = radius * Math.sin(thetaRad);
-                const z = zCenter - radius * Math.cos(thetaRad);
-                const rotateY = -theta;
-                
-                card.dataset.x = x;
-                card.dataset.z = z;
-                card.dataset.rotateY = rotateY;
-                
-                // Initial hidden state for entrance animation
+                // Use GSAP's transformOrigin to build the Convex cylinder natively.
+                // The pivot is pushed BACKWARDS by radius, so the cards orbit around it!
                 gsap.set(card, {
-                    x: x,
-                    y: 100,
-                    z: z - 500, // pushed further back
-                    rotationY: rotateY + (Math.random() * 20 - 10), // slight random twist
+                    transformOrigin: `50% 50% ${-radius}px`,
+                    rotationY: angle,
+                    y: 150,
                     opacity: 0,
-                    transformStyle: "preserve-3d",
-                    force3D: true
+                    scale: 0.8
                 });
             });
+            
+            // The front card is at local Z=0, so the ring itself should stay at Z=0!
+            gsap.set(rosterRing, { z: 0, rotationY: 0 });
         }
         
         layoutCards();
@@ -247,23 +239,34 @@ document.addEventListener('DOMContentLoaded', () => {
             trigger: ".roster-wrapper",
             start: "top 70%",
             onEnter: () => {
-                cards.forEach((card, i) => {
-                    gsap.to(card, {
-                        duration: 1.5,
-                        x: parseFloat(card.dataset.x),
-                        y: 0,
-                        z: parseFloat(card.dataset.z),
-                        rotationY: parseFloat(card.dataset.rotateY),
-                        opacity: 1,
-                        ease: "power4.out",
-                        delay: i * 0.05
-                    });
+                gsap.to(cards, {
+                    duration: 1.2,
+                    y: 0,
+                    opacity: 1,
+                    scale: 1,
+                    ease: "power3.out",
+                    stagger: 0.05
                 });
             },
             once: true
         });
 
-        // Mouse Interaction & Ambient Motion
+        // Scroll-driven rotation (The "Scrolling")
+        const totalRotation = (numCards - 1) * (window.innerWidth < 768 ? 25 : 15);
+        
+        ScrollTrigger.create({
+            trigger: ".roster-wrapper",
+            start: "center center",
+            end: `+=${totalRotation * 10}`, // Scroll distance
+            pin: true,
+            scrub: 1,
+            animation: gsap.to(rosterRing, {
+                rotationY: -totalRotation,
+                ease: "none"
+            })
+        });
+
+        // Mouse Hover Interaction (Springy subtle motion)
         let mouseX = 0;
         let mouseY = 0;
         let targetMouseX = 0;
@@ -284,26 +287,19 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // Use quickSetter for performance
-        const setRotY = gsap.quickSetter(rosterRing, "rotationY", "deg");
-        const setRotX = gsap.quickSetter(rosterRing, "rotationX", "deg");
-        const setX = gsap.quickSetter(rosterRing, "x", "px");
-        const setY = gsap.quickSetter(rosterRing, "y", "px");
-
         function renderRoster() {
-            time += 0.005;
+            time += 0.01;
+            mouseX += (targetMouseX - mouseX) * 0.1;
+            mouseY += (targetMouseY - mouseY) * 0.1;
             
-            // Lerp mouse for springy feel
-            mouseX += (targetMouseX - mouseX) * 0.05;
-            mouseY += (targetMouseY - mouseY) * 0.05;
-            
-            // Apply restrained motion
-            setRotY(mouseX * 4);
-            setRotX(-mouseY * 4);
-            setX(mouseX * 15);
-            
-            // Ambient breathing + mouse Y translation
-            setY(mouseY * 15 + Math.sin(time) * 10);
+            // Apply subtle translate and rotate to X/Y/Z directly on ring
+            // We DO NOT modify rotationY here because ScrollTrigger controls it!
+            gsap.set(rosterRing, {
+                x: mouseX * 20,
+                y: mouseY * 20 + Math.sin(time) * 10,
+                rotationX: -mouseY * 5,
+                rotationZ: mouseX * 2
+            });
             
             requestAnimationFrame(renderRoster);
         }
