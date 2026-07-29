@@ -194,13 +194,16 @@ document.addEventListener('DOMContentLoaded', () => {
         let radius = window.innerWidth < 768 ? 400 : 550; // Tighter radius for extreme perspective
         
         imgs.forEach((img, i) => {
-            // Use pure Vanilla JS to set the transform.
-            img.style.transform = `rotateY(${i * -36}deg) translateZ(${-radius}px)`;
-            img.style.backgroundImage = 'url(./Assets/img' + ((i % 7) + 1) + '.png)';
-            img.style.backgroundSize = 'cover';
-            img.style.backgroundPosition = 'center';
-            img.style.backfaceVisibility = 'hidden';
-            img.style.borderRadius = '20px'; // Soft corners like the reference
+            gsap.set(img, {
+                rotateY: i * -36,
+                transformOrigin: `50% 50% ${radius}px`,
+                z: -radius,
+                backgroundImage: 'url(./Assets/img' + ((i % 7) + 1) + '.png)',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backfaceVisibility: 'hidden',
+                borderRadius: '20px'
+            });
         });
 
         // Now animate the ENTIRE RING in, instead of the individual images.
