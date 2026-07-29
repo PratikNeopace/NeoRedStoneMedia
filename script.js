@@ -197,17 +197,14 @@ document.addEventListener('DOMContentLoaded', () => {
         gsap.set(ring, { z: -radius });
 
         imgs.forEach((img, i) => {
-            // Convex cylinder: push OUTWARDS by radius
-            gsap.set(img, {
-                rotationY: i * -36, // GSAP's syntax for rotateY
-                z: radius, // Push outward
-                transformOrigin: "50% 50%", // Center pivot
-                backgroundImage: 'url(./Assets/img' + ((i % 7) + 1) + '.png)',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                backfaceVisibility: 'hidden',
-                borderRadius: '20px'
-            });
+            // Convex cylinder: rotate first, then push OUTWARDS by radius
+            // MUST use raw CSS to prevent GSAP from re-ordering translate before rotate!
+            img.style.transform = `rotateY(${i * -36}deg) translateZ(${radius}px)`;
+            img.style.backgroundImage = 'url(./Assets/img' + ((i % 7) + 1) + '.png)';
+            img.style.backgroundSize = 'cover';
+            img.style.backgroundPosition = 'center';
+            img.style.backfaceVisibility = 'hidden';
+            img.style.borderRadius = '20px';
         });
 
         // Now animate the ENTIRE RING in, instead of the individual images.
