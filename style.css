@@ -329,7 +329,7 @@ a:hover {
 .roster-wrapper {
     perspective: 1500px;
     margin: 20px 0 60px; /* Reduced top margin */
-    overflow: hidden;
+    overflow: visible; /* CRITICAL FIX: prevents the 3D carousel from clipping horizontally at the bottom */
     padding: 0 0 40px; /* Removed top padding */
 }
 

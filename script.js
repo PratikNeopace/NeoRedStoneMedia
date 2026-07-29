@@ -191,16 +191,23 @@ document.addEventListener('DOMContentLoaded', () => {
         gsap.set(dragger, { opacity:0 });
         gsap.set(ring, { rotationY: 0 }); // Start looking at the front of the concave cylinder
         
-        let radius = window.innerWidth < 768 ? 400 : 550; // Tighter radius for extreme perspective
+        let radius = window.innerWidth < 768 ? 400 : 550; // Perfect radius for Convex layout
         
+        // Push the entire ring backwards so the front card sits near the screen plane
+        gsap.set(ring, { z: -radius });
+
         imgs.forEach((img, i) => {
-            // Use pure Vanilla JS to set the transform.
-            img.style.transform = `rotateY(${i * -36}deg) translateZ(${-radius}px)`;
-            img.style.backgroundImage = 'url(./Assets/img' + ((i % 7) + 1) + '.png)';
-            img.style.backgroundSize = 'cover';
-            img.style.backgroundPosition = 'center';
-            img.style.backfaceVisibility = 'hidden';
-            img.style.borderRadius = '20px'; // Soft corners like the reference
+            // Convex cylinder: push OUTWARDS by radius
+            gsap.set(img, {
+                rotationY: i * -36, // GSAP's syntax for rotateY
+                z: radius, // Push outward
+                transformOrigin: "50% 50%", // Center pivot
+                backgroundImage: 'url(./Assets/img' + ((i % 7) + 1) + '.png)',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backfaceVisibility: 'hidden',
+                borderRadius: '20px'
+            });
         });
 
         // Now animate the ENTIRE RING in, instead of the individual images.
