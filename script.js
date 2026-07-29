@@ -248,22 +248,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- NEW: AJAX Form Submission with Security ---
+    // --- NEW: AJAX Form Submission (FormSubmit) ---
     const contactForm = document.querySelector('.contact-form');
     if (contactForm) {
-        // Record load time for anti-spam minimum time check
-        const loadTimeInput = document.getElementById('load_time');
-        if (loadTimeInput) {
-            loadTimeInput.value = Math.floor(Date.now() / 1000);
-        }
-
-        // Generate CSRF Double-Submit Cookie (basic implementation for static sites)
-        const generateToken = () => {
-            return Math.random().toString(36).substring(2) + Date.now().toString(36);
-        };
-        const csrfToken = generateToken();
-        document.cookie = `csrf_token=${csrfToken}; path=/; SameSite=Strict`;
-
         contactForm.addEventListener('submit', function (e) {
             e.preventDefault();
             
@@ -276,27 +263,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 method: 'POST',
                 body: new FormData(contactForm),
                 headers: {
-                    'Accept': 'application/json',
-                    'X-CSRF-Token': csrfToken
+                    'Accept': 'application/json'
                 }
             })
-            .then(response => {
-                if (!response.ok && response.status !== 400 && response.status !== 429 && response.status !== 403) {
-                    throw new Error('Server error');
-                }
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
-                if (data.success) {
-                    alert('Your enquiry has been sent successfully.\\n\\nWe will contact you shortly.');
+                if (data.success || data.success === 'true') {
+                    alert('Message sent successfully! We will get back to you soon.');
                     contactForm.reset();
                 } else {
-                    alert(data.message || 'Something went wrong.\\n\\nPlease try again.');
+                    alert('There was an issue sending your message. Please try again.');
                 }
             })
             .catch(error => {
                 console.error('Mail Error:', error);
-                alert('Something went wrong.\\n\\nPlease try again.');
+                alert('There was an issue sending your message. Please try again.');
             })
             .finally(() => {
                 submitBtn.textContent = originalBtnText;

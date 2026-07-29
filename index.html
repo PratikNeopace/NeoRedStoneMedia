@@ -383,11 +383,13 @@
             <div class="contact-right">
                 <div class="contact-form-card">
                     <h3>Get started with a free quotation</h3>
-                    <!-- Custom PHP Backend -->
-                    <form action="./send-mail.php" method="POST" class="contact-form">
-                        <!-- Security Fields -->
-                        <input type="hidden" name="load_time" id="load_time" value="">
-                        <input type="text" name="website_url" style="display:none" tabindex="-1" autocomplete="off">
+                    <!-- FormSubmit AJAX Backend -->
+                    <form action="https://formsubmit.co/ajax/info@neoredstonemedia.com" method="POST" class="contact-form">
+                        <!-- FormSubmit Configuration Fields -->
+                        <input type="hidden" name="_captcha" value="false">
+                        <input type="hidden" name="_subject" value="New Website Inquiry">
+                        <!-- Security Honeypot -->
+                        <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
                         
                         <div class="form-group">
                             <label for="name">Name</label>
