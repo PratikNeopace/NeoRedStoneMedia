@@ -118,9 +118,15 @@ a:hover {
     align-items: center;
 }
 
+.logo a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
 .logo img {
-    height: 62px;
-    width: 195px;
+    height: 54px;
+    width: auto;
     object-fit: contain;
     display: block;
     transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
