@@ -271,54 +271,114 @@ a:hover {
 .img6 { bottom: -15%; right: 30%; width: 190px; top: auto; }
 .img7 { top: 60%; right: 2%; width: 170px; }
 
-/* Partners Section */
-.partners {
-    padding: 80px 0;
-    border-top: 1px solid #eee;
-    border-bottom: 1px solid #eee;
-    background-color: #fff;
+/* NeoRedStone Micro Slats Wordmark Experience */
+.neoredstone-slats-section {
+    position: relative;
+    margin-top: 130px;
+    scroll-margin-top: 100px;
+    padding: 45px 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 50%, #12131C 0%, #08080A 85%);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+    color: #fff;
+    cursor: default;
 }
 
-.partners-container {
+.slats-ambient-bg {
+    position: absolute;
+    inset: -20px;
+    opacity: 0.18;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.slats-backlight {
+    position: absolute;
+    inset: -60px;
+    background: radial-gradient(ellipse 65% 50% at 50% 50%, rgba(209, 50, 57, 0.16) 0%, rgba(255, 255, 255, 0.03) 45%, transparent 75%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.slats-inner-container {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.slats-stage {
+    position: relative;
+    width: 100%;
+    max-width: 1200px;
+    height: 240px;
+    margin: 0 auto;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 60px;
+    justify-content: center;
 }
 
-.partners-text h2 {
-    font-family: var(--font-heading);
-    font-size: 2.8rem;
-    font-weight: 400;
-    line-height: 1.1;
-    color: #555; 
-}
-
-.partners-text .highlight-red {
-    color: var(--accent-color);
-}
-
-.logos-strip {
+.slats-wordmark-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    flex: 1;
-    gap: 30px;
+    justify-content: center;
 }
 
-.logos-strip img {
-    object-fit: contain;
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+.slats-masked-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1300 260' preserveAspectRatio='xMidYMid meet'%3E%3Ctext x='50%25' y='64%25' text-anchor='middle' dominant-baseline='middle' font-family='Poppins, sans-serif' font-weight='900' font-size='185' letter-spacing='-4px' fill='white'%3ENeoRedStone%3C/text%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1300 260' preserveAspectRatio='xMidYMid meet'%3E%3Ctext x='50%25' y='64%25' text-anchor='middle' dominant-baseline='middle' font-family='Poppins, sans-serif' font-weight='900' font-size='185' letter-spacing='-4px' fill='white'%3ENeoRedStone%3C/text%3E%3C/svg%3E");
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+    filter: drop-shadow(0 20px 45px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 35px rgba(209, 50, 57, 0.28));
+    transition: filter 0.3s ease;
 }
 
-.logo-hyatt { width: 102px; height: 38px; }
-.logo-conrad { width: 101px; height: 36px; }
-.logo-kpit { width: 118px; height: 38px; }
-.logo-tata { width: 94px; height: 38px; }
-.logo-purple { width: 136px; height: 45px; }
+/* Fallback for environments where WebGL is unavailable */
+.slats-fallback {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 260px;
+}
 
-.logos-strip img:hover {
-    transform: scale(1.1);
+.fallback-wordmark {
+    font-family: var(--font-poppins);
+    font-weight: 900;
+    font-size: clamp(3rem, 10vw, 8rem);
+    letter-spacing: -3px;
+    background: linear-gradient(135deg, #CBD5E1 0%, #FFFFFF 40%, #D13239 50%, #94A3B8 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.8));
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
 }
 
 /* Roster */
@@ -1166,9 +1226,55 @@ a:hover {
         padding-bottom: 100px;
         min-height: auto;
     }
-    .partners-container {
-        flex-direction: column;
-        text-align: center;
+}
+
+/* Micro Slats Responsive Media Queries */
+@media (max-width: 1200px) {
+    .neoredstone-slats-section {
+        margin-top: 110px;
+    }
+    .slats-stage {
+        height: 200px;
+    }
+}
+
+@media (max-width: 992px) {
+    .neoredstone-slats-section {
+        margin-top: 90px;
+        padding: 35px 0;
+    }
+    .slats-stage {
+        height: 170px;
+    }
+}
+
+@media (max-width: 768px) {
+    .neoredstone-slats-section {
+        margin-top: 70px;
+        scroll-margin-top: 80px;
+        padding: 28px 0;
+    }
+    .slats-stage {
+        height: 130px;
+    }
+}
+
+@media (max-width: 480px) {
+    .neoredstone-slats-section {
+        margin-top: 50px;
+        padding: 22px 0;
+    }
+    .slats-stage {
+        height: 95px;
+    }
+}
+
+@media (max-width: 360px) {
+    .neoredstone-slats-section {
+        margin-top: 40px;
+    }
+    .slats-stage {
+        height: 80px;
     }
 }
 
